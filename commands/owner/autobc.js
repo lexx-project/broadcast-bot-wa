@@ -1,5 +1,5 @@
-const settings = require("../../settings");
 const logger = require("../../utils/logger");
+const { isOwner } = require("../../utils/ownerCheck");
 
 // Delay sederhana untuk jeda antar grup
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -32,13 +32,7 @@ module.exports = {
    */
   run: async (client, msg, args) => {
     // --- VALIDASI OWNER ---
-    const senderJid = msg.key.remoteJid.endsWith("@g.us")
-      ? msg.key.participant
-      : msg.key.remoteJid;
-
-    const senderNumber = senderJid.split("@")[0];
-
-    if (senderNumber !== settings.ownerNumber) {
+    if (!isOwner(msg)) {
       return client.sendMessage(
         msg.key.remoteJid,
         {

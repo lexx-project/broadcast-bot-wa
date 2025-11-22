@@ -1,4 +1,5 @@
 const settings = require("../../settings"); // <-- Kita panggil settings untuk cek nomor owner
+const { isOwner } = require("../../utils/ownerCheck");
 
 module.exports = {
   name: "listgrup",
@@ -13,13 +14,7 @@ module.exports = {
    */
   run: async (client, msg, args) => {
     // --- VALIDASI OWNER ---
-    const senderJid = msg.key.remoteJid.endsWith("@g.us")
-      ? msg.key.participant
-      : msg.key.remoteJid;
-
-    const senderNumber = senderJid.split("@")[0];
-
-    if (senderNumber !== settings.ownerNumber) {
+    if (!isOwner(msg)) {
       return client.sendMessage(
         msg.key.remoteJid,
         {

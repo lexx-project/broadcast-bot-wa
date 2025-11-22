@@ -88,7 +88,8 @@ async function connectToWhatsApp() {
   // === Penangan Pesan Masuk (Handler Utama) ===
   client.ev.on("messages.upsert", async (m) => {
     const msg = m.messages[0];
-    if (!msg.message || msg.key.fromMe) return; // Abaikan pesan dari bot sendiri
+    // Izinkan pesan dari nomor bot sendiri agar bisa mengetik command dari device yang sama
+    if (!msg.message) return;
 
     const msgType = Object.keys(msg.message)[0];
     if (msgType !== "conversation" && msgType !== "extendedTextMessage") return; // Hanya proses pesan teks
